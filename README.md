@@ -56,8 +56,4 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 - Next.js Web App: [http://localhost:3000](http://localhost:3000)
 
----
 
-## 📖 Presentation and Script Resources
-If you are preparing for a pitch or demo video:
-- Review the slide outline, presenter scripts, and video walkthrough timeline in the [Presentation & Script Deck](file:///C:/Users/91801/.gemini/antigravity-ide/brain/d8868083-cdc3-4327-ac0f-39f880bd239b/presentation_deck_and_script.md).
