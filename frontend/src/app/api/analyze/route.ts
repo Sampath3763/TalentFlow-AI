@@ -30,19 +30,27 @@ Identify the following types of information:
 - Action Item (must have a deadline and owner)
 - Risk (Financial, Cybersecurity, Legal, Ethical, Operational)
 
-Format your response exactly as a JSON object containing a single key "items" which is an array of objects.
-Do NOT wrap the JSON in markdown code blocks.
-Each object in the "items" array must match this interface:
-{
-  "type": "decision" | "action" | "risk",
-  "title": "Short summary title",
-  "description": "More detailed description or exact constraint",
-  "owner": "Name or Department (if applicable, else null)",
-  "confidence": number (0 to 100),
-  "riskType": "Cybersecurity" | "Financial" | "Legal" | "Ethical" | "Operational" | null
-}
+Also extract:
+- orgName: The name of the client company or organisation this meeting is about (e.g. "NovaBank Digital", "Acme Corp"). Use "Unknown Organisation" if not identifiable.
+- meetingTitle: A concise 4-6 word description of what this meeting was about (e.g. "Cybersecurity Incident War Room", "Senior Engineer Intake Call").
 
-Extract a maximum of 6 most critical items to keep the dashboard concise. Prioritize cybersecurity risks, firm decisions, and urgent action items.`;
+Format your response exactly as a JSON object with this structure:
+{
+  "orgName": "string",
+  "meetingTitle": "string",
+  "items": [
+    {
+      "type": "decision" | "action" | "risk",
+      "title": "Short summary title",
+      "description": "More detailed description or exact constraint",
+      "owner": "Name or Department (if applicable, else null)",
+      "confidence": number (0 to 100),
+      "riskType": "Cybersecurity" | "Financial" | "Legal" | "Ethical" | "Operational" | null
+    }
+  ]
+}
+Do NOT wrap the JSON in markdown code blocks.
+Extract a maximum of 6 most critical items. Prioritize cybersecurity risks, firm decisions, and urgent action items.`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',

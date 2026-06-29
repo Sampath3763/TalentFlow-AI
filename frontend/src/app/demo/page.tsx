@@ -18,6 +18,8 @@ export default function DemoPage() {
   // State for dynamic AI extractions
   const [extractedItems, setExtractedItems] = useState<any[]>([]);
   const [apiError, setApiError] = useState("");
+  const [orgName, setOrgName] = useState("");
+  const [meetingTitle, setMeetingTitle] = useState("");
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -69,6 +71,8 @@ export default function DemoPage() {
 
       if (res.ok && data.items) {
         setExtractedItems(data.items);
+        if (data.orgName)    setOrgName(data.orgName);
+        if (data.meetingTitle) setMeetingTitle(data.meetingTitle);
       } else {
         setApiError(data.error || "Failed to parse transcript");
       }
@@ -89,9 +93,36 @@ export default function DemoPage() {
     setCurrentStep(0);
     setExtractedItems([]);
     setApiError("");
+    setOrgName("");
+    setMeetingTitle("");
     setPastedText("");
     setSelectedFile(null);
   };
+
+  // ─── Save org to Memory page localStorage on completion ─────────────────
+  const saveOrgToMemory = (name: string, title: string) => {
+    if (!name || name === "Unknown Organisation") return;
+    try {
+      const existing = JSON.parse(localStorage.getItem("agentic_memories") || "[]");
+      const alreadyExists = existing.some((m: any) => m.name === name);
+      if (!alreadyExists) {
+        const newEntry = {
+          id: `M-${Date.now().toString().slice(-4)}`,
+          name,
+          model: title || "Meeting Analysis",
+          salary: "Pending Data...",
+          placements: 0,
+          culture: "To be confirmed",
+          strategy: "To be confirmed",
+          acceptanceRate: 0,
+        };
+        localStorage.setItem("agentic_memories", JSON.stringify([newEntry, ...existing]));
+      }
+    } catch (e) {
+      console.error("Failed to save org memory:", e);
+    }
+  };
+  // ────────────────────────────────────────────────────────────────────────
 
   // ─── Human-in-the-Loop handlers ──────────────────────────────────────────
   const handleHtlApprove = () => {
@@ -99,6 +130,8 @@ export default function DemoPage() {
     if (extractedItems.length > 0) {
       sessionStorage.setItem("talentflow_extracted", JSON.stringify(extractedItems));
     }
+    // Save org + meeting title to Memory page
+    saveOrgToMemory(orgName, meetingTitle);
     setCurrentStep(6); // advance to END
     setUploadState("done");
   };
@@ -365,10 +398,20 @@ export default function DemoPage() {
                     className="mt-6 p-6 bg-blue-950/20 border border-blue-500/30 rounded-2xl relative overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
-                    <h4 className="text-lg font-bold text-blue-100 mb-2 flex items-center gap-2">
+                    <h4 className="text-lg font-bold text-blue-100 mb-1 flex items-center gap-2">
                       <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                       Extracted AI Intelligence
                     </h4>
+                    {orgName && (
+                      <div className="mb-2">
+                        <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                          📌 {orgName}
+                        </span>
+                        {meetingTitle && (
+                          <span className="ml-2 text-xs text-gray-400 italic">{meetingTitle}</span>
+                        )}
+                      </div>
+                    )}
 
                     <div className="space-y-3 mb-6 relative z-10 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
 
