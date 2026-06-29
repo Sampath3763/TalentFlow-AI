@@ -7,14 +7,57 @@ TalentFlow AI is an **Agentic Recruitment & Staffing Decision Intelligence Platf
 ## 📂 Project Repository Structure
 ```
 newproject-main/
-├── backend/            # FastAPI app, SQLAlchemy models, LangGraph state machine
-├── frontend/           # Next.js 14 Web Application (React, Tailwind, Framer Motion)
-├── docs/               # Detailed platform and architecture guides
-│   ├── platform_documentation.md   # Core platform features & visual impact
-│   ├── ai_agent_documentation.md   # Schema, state nodes, ChromaDB specs
-│   └── setup_instructions.md       # Step-by-step setup walkthrough
-├── seed/               # Synthetic database seed scripts
-└── docker-compose.yml  # Docker infrastructure blueprint
+├── backend/                        # Python / FastAPI Backend App
+│   ├── app/
+│   │   ├── agents/                 # LangGraph state machine orchestrator
+│   │   │   ├── specialized/        # Node agents (Requirements, Discovery, Recs)
+│   │   │   │   ├── candidate_discovery_agent.py
+│   │   │   │   ├── recommendation_agent.py
+│   │   │   │   └── requirements_agent.py
+│   │   │   ├── planner.py          # StateGraph definitions and compile
+│   │   │   └── state.py            # Unified AgentState TypedDict schema
+│   │   ├── api/                    # FastAPI routes / API routers
+│   │   │   └── endpoints.py        # /jobs, /recommendations, /analyze routes
+│   │   ├── db/                     # DB connection & ORM entity schemas
+│   │   │   ├── database.py         # SQLite connection setup
+│   │   │   └── models.py           # Job, Client, Candidate, Rec entities
+│   │   ├── memory/                 # Vector memory layer integration
+│   │   │   └── chroma_store.py     # ChromaDB client & collection operations
+│   │   └── main.py                 # FastAPI app entrypoint & CORS config
+│   └── requirements.txt            # Python backend dependencies
+│
+├── frontend/                       # React / Next.js Web App
+│   ├── src/
+│   │   ├── app/                    # Next.js App Router folders
+│   │   │   ├── api/analyze/        # Gemini 2.5 Flash server extraction route
+│   │   │   │   └── route.ts
+│   │   │   ├── client/             # /client - Employer portal page
+│   │   │   ├── dashboard/          # /dashboard - Recruiter HIFL command center
+│   │   │   ├── demo/               # /demo - Live pipeline demo page (HTL Gate)
+│   │   │   ├── memory/             # /memory - Org memory visualization page
+│   │   │   ├── globals.css         # Styling directives
+│   │   │   ├── layout.tsx          # Nav links layout structure
+│   │   │   └── page.tsx            # Landing index page
+│   │   └── components/             # Reusable UI component layer
+│   │       ├── ui/                 # Atomic elements (card UI component)
+│   │       │   └── card.tsx
+│   │       ├── AgentGraph.tsx      # Multi-agent visual state graph
+│   │       ├── AgentTimeline.tsx   # Chronological log execution list
+│   │       └── ExplainabilityDrawer.tsx # Drawer displaying reasoning elements
+│   ├── package.json                # Project script registry
+│   └── tailwind.config.ts          # Styling engine constraints
+│
+├── docs/                           # Documentation library folder
+│   ├── platform_documentation.md   # Core platform features & metrics
+│   ├── ai_agent_documentation.md   # AI Agent systems & ChromaDB design
+│   ├── architecture.md             # Existing visual flow diagrams
+│   └── setup_instructions.md       # Step-by-step local running instructions
+│
+├── seed/                           # Ingestion seed scripts
+│   ├── generate_data.py            # Faker-driven database generator
+│   └── requirements.txt            # Seed environment requirements
+│
+└── docker-compose.yml              # Production containerization setup
 ```
 
 ---
