@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy>=2.0.35
+pydantic
+pydantic-settings
+langgraph
+langchain
+langchain-openai
+chromadb
+faker
+python-dotenv
+alembic
